@@ -4,6 +4,7 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask_pymongo import PyMongo
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -34,13 +35,15 @@ def get_one_text(name):
 
 @app.route('/text', methods=['POST'])
 def add_text():
+  now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
   rawtext = mongo.db.rawtext
   url = request.json['url']
   text = request.json['text']
-  page = request.json['page']
-  reference_url = request.json['reference_url']
+  #page = request.json['page']
+  #reference_url = request.json['reference_url']
   entry_id = rawtext.insert({'url': url, 
-                            'text': text})
+                            'text': text,
+                            'datetime': now})
                             #'page': page,
                             #'reference_url': reference_url})
   new_entry = rawtext.find_one({'_id': entry_id })
