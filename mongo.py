@@ -40,9 +40,9 @@ def add_text():
   page = request.json['page']
   reference_url = request.json['reference_url']
   entry_id = rawtext.insert({'url': url, 
-                            'text': text,
-                            'page': page,
-                            'reference_url': reference_url})
+                            'text': text})
+                            #'page': page,
+                            #'reference_url': reference_url})
   new_entry = rawtext.find_one({'_id': entry_id })
   output = {'text' : new_entry['text']}
   return jsonify({'result' : output})
