@@ -37,18 +37,15 @@ def get_one_text(name):
 def add_text():
   now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
   rawtext = mongo.db.rawtext
-  url = request.json['url']
-  text = request.json['text']
-  #page = request.json['page']
-  #reference_url = request.json['reference_url']
-  entry_id = rawtext.insert({'url': url, 
-                            'text': text,
-                            'datetime': now})
+  request.json['datetime'] = now
+  entry_id = rawtext.insert_one(request.json)
                             #'page': page,
                             #'reference_url': reference_url})
-  new_entry = rawtext.find_one({'_id': entry_id })
-  output = {'text' : new_entry['text']}
-  return jsonify({'result' : output})
+  try:
+    new_entry = rawtext.find_one({'_id': entry_id })
+  except:
+    return 'save failed'
+  return 'save succeeded'
 
 if __name__ == '__main__':
     app.run(debug=True)
